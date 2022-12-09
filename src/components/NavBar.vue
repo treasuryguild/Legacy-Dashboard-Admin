@@ -1,9 +1,7 @@
 <script setup>
   import { useStore } from '../store/index';
   import { supabase } from '../supabase'
-  import { onMounted, ref } from 'vue'
-  import { useGetAllProjects } from '../composables/getallprojects'
-  
+  import { onMounted, ref } from 'vue'  
   import { useRoute } from 'vue-router'
 
 //CSS javascript below
@@ -22,7 +20,6 @@ function demo() {
    if(mousein) return
    document.getElementById('demo' + count++)
       .classList.toggle('hover')
-   
 }
 
 function demo2() {
@@ -44,39 +41,23 @@ document.addEventListener('mouseover', function() {
    reset()
 })
 //CSS javaScript above
+
 //Navbar javascript below
   const route = useRoute()
   const store = useStore()
 
-  const group = route.params.group
-  const project = route.params.project
-
-  const orgEl = 'treasuryguild'
-  const repoEl = 'treasury-system-v4'
-  const projectJ = ref('')
-  const fundJ = ref('')
-  const poolJ = ref('')
   const loadGroup = ref(false)
-
-  //const { projects, projectData, projectNames } = await useGetAllProjects()
-
   const loading = ref(true)
-  const group_project_name = ref([])
 
+  const group_project_name = ref([])
   const group_updated_at = ref([])
   const groupname = ref([])
   const groupid = ref([])
-
-  const projectname = ref([])
-  const projectid = ref([])
-  const project_updated_at = ref([])
-  const project_groupid = ref([])
 
   const selProject = ref ('')
   const selGroup = ref ('')
   
   const projectGroupId = ref()
-  const updatedx = ref()
 
   onMounted(() => {
     getGroups()
@@ -95,7 +76,6 @@ document.addEventListener('mouseover', function() {
 
       if (data) {
         for (let j in data) {
-          console.log("loading", j)
           groupid.value.push(data[j].group_id)
           group_updated_at.value.push(data[j].updated_at)
           groupname.value.push(data[j].group_name)
@@ -108,31 +88,6 @@ document.addEventListener('mouseover', function() {
     }
   }
 
-  async function getProjects() {
-    
-    try {
-      loading.value = true
-
-      let { data, error, status } = await supabase
-        .from('projects')
-        .select(`project_id, project_name, updated_at, group_id`)
-        
-      if (error && status !== 406) throw error
-
-      if (data) {
-        for (let j in data) {
-          projectid.value.push(data[j].project_id)
-          project_updated_at.value.push(data[j].updated_at)
-          projectname.value.push(data[j].project_name)
-          project_groupid.value.push(data[j].group_id)
-        }
-      }
-    } catch (error) {
-      alert(error.message)
-    } finally {
-      loading.value = false
-    }
-  }
 
 async function onChange(i) {
     loadGroup.value = true
@@ -140,7 +95,6 @@ async function onChange(i) {
     group_project_name.value = []
     store.changeProject('')
     store.changeGroup(i)
-    console.log("Its alive",i)
     for (let j in groupname.value) {
       if (groupname.value[j] == i) {
          projectGroupId.value = groupid.value[j]
@@ -158,7 +112,6 @@ async function onChange(i) {
 
       if (data) {
         for (let j in data) {
-         console.log('it works')
           group_project_name.value.push(data[j].project_name)
         }
       }
@@ -168,7 +121,6 @@ async function onChange(i) {
     } finally {
       loading.value = false
     }
-    console.log(group_project_name.value)
     
     window.scrollTo(0, 0);
 }
@@ -176,8 +128,6 @@ async function onChange(i) {
 function onChange2(i) { 
     selProject.value = `/${selGroup.value}/${i}`
     store.changeProject(i)
-    console.log("Its alive",i)
-    
     window.scrollTo(0, 0);
 }
 
