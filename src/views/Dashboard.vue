@@ -1,6 +1,5 @@
 <script setup>
 import { useStore } from '../store/index'
-import CheckTransactions from '../components/CheckTransactions.vue'
 import CreateFromScratch from '../components/CreateFromScratch.vue'
 import UpdateWallets from '../components/UpdateWallets.vue'
 
