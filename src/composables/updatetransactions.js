@@ -206,7 +206,7 @@ export async function useGetAllTransactions() {
     
               for (let k in transactions.value[i].contributions) {
                 task_creator.value = transactions.value[i].contributions[k].taskCreator
-                task_name.value = transactions.value[i].contributions[k].name?transactions.value[i].contributions[k].name:''
+                task_name.value = transactions.value[i].contributions[k].name?transactions.value[i].contributions[k].name.join(' '):''
                 task_label.value = transactions.value[i].contributions[k].label?transactions.value[i].contributions[k].label:''
                 task_description.value = transactions.value[i].contributions[k].description?transactions.value[i].contributions[k].description.join(' '):''
     
@@ -239,7 +239,7 @@ export async function useGetAllTransactions() {
     
                 for (let m in transactions.value[i].contributions[k].contributors) {
                   contributor_id.value = m
-                  ada.value = transactions.value[i].contributions[k].contributors[m].ADA
+                  ada.value = transactions.value[i].contributions[k].contributors[m].ADA?transactions.value[i].contributions[k].contributors[m].ADA:(transactions.value[i].contributions[k].contributors[m].ada?transactions.value[i].contributions[k].contributors[m].ada:1.344798)
                   gmbl.value = transactions.value[i].contributions[k].contributors[m].GMBL?transactions.value[i].contributions[k].contributors[m].GMBL:(transactions.value[i].contributions[k].contributors[m].gimbal?transactions.value[i].contributions[k].contributors[m].gimbal:0)
                   agix.value = transactions.value[i].contributions[k].contributors[m].AGIX?transactions.value[i].contributions[k].contributors[m].AGIX:0
                   if (!contributor_idx.value.includes(contributor_id.value)) {

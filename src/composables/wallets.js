@@ -25,7 +25,26 @@ export async function useWallets() {
     }
   }
 
+  async function readTextFile() {
+    const response = await axios.get('https://raw.githubusercontent.com/treasuryguild/treasury-system-v4/main/data/dework-wallets.txt');
+    const text = response.data;
+  
+    const lines = text.split('\n');
+    const json = {};
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.length === 0) continue;
+      const id = line.substring(line.length - 6);
+      json[id] = line;
+      wallets.value.push(line)
+      walletIds.value.push(id);
+    }
+  
+    console.log(json);
+  }
+
   await process()
+  await readTextFile()
 
   return { wallets, walletIds }
 }
