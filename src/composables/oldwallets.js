@@ -1,10 +1,10 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-export async function useWallets() {
+export async function useOldWallets() {
 
-  const wallets = ref([])
-  const walletIds = ref([])
+  const oldWallets = ref([])
+  const oldWalletIds = ref([])
   const orgEl = 'treasuryguild'
   const repoEl = 'treasury-system-v4'
 
@@ -13,14 +13,14 @@ export async function useWallets() {
     console.log(data)
     for (let i in data) {
       if (data[i] == "no__id") {
-        wallets.value.push(data[i])
-        walletIds.value.push("no__id");
+        oldWallets.value.push(data[i])
+        oldWalletIds.value.push("no__id");
       /*} else if ( data[i] == "addr1vxm9rssxy335nxtph8x4jndrnxj7eyg0e66uv0u7k4dzyjsg6fr38" ) {
-        wallets.value.push(data[i])
-        walletIds.value.push("IOG");*/
+        oldWallets.value.push(data[i])
+        oldWalletIds.value.push("IOG");*/
       } else {
-        wallets.value.push(data[i])
-        walletIds.value.push(data[i].substr(data[i].length - 6));
+        oldWallets.value.push(data[i])
+        oldWalletIds.value.push(data[i].substr(data[i].length - 6));
       }
     }
   }
@@ -36,8 +36,8 @@ export async function useWallets() {
       if (line.length === 0) continue;
       const id = line.substring(line.length - 6);
       json[id] = line;
-      wallets.value.push(line)
-      walletIds.value.push(id);
+      oldWallets.value.push(line)
+      oldWalletIds.value.push(id);
     }
   
     console.log(json);
@@ -46,5 +46,5 @@ export async function useWallets() {
   await process()
   await readTextFile()
 
-  return { wallets, walletIds }
+  return { oldWallets, oldWalletIds }
 }
