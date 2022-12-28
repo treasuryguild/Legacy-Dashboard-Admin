@@ -47,7 +47,7 @@ export async function useGetAllTransactions() {
 
     async function changeToOldWallet(name) { //use this function to assign old names to addresses
       console.log("testing function",name)
-      const result = ref("no__id")
+      let result = ref("no__id")
       for (let i in oldWallets.value) {
         if (name == oldWalletIds.value[i]) {
           result.value = oldWallets.value[i].substring(oldWallets.value[i].length - 6)
