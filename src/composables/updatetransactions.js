@@ -3,6 +3,7 @@ import { useStore } from '../store/index';
 import { supabase } from '../supabase'
 import { ref } from 'vue'
 import { useGetTxs } from './gettransactions'
+import { useOldWallets } from './oldwallets'
 
 // by convention, composable function names start with "use"
 export async function useGetAllTransactions() {
@@ -42,6 +43,13 @@ export async function useGetAllTransactions() {
     const contributor_idx = ref([])
     const updated_atx = ref([])
     const transaction_idx = ref([])
+    const { oldWallets, oldWalletIds } = await useOldWallets()
+
+    async function changeToOldWallet(name) { //use this function to assign old names to addresses
+      console.log("testing function",name)
+      const result = ref("no__id")
+      return result.value
+    }
 
     async function checkWallets() {
     
@@ -244,7 +252,13 @@ export async function useGetAllTransactions() {
                   agix.value = transactions.value[i].contributions[k].contributors[m].AGIX?transactions.value[i].contributions[k].contributors[m].AGIX:0
                   if (!contributor_idx.value.includes(contributor_id.value)) {
                     console.log(contributor_id.value)
-                    contributor_id.value = "no__id"
+                    if (oldWalletIds.value.includes(contributor_id.value)) {
+                      const oldwallet = await changeToOldWallet(contributor_id.value)
+                      console.log("changed", oldwallet)
+                      contributor_id.value = oldwallet
+                    } else {
+                      contributor_id.value = "no__id"
+                    }
                   }
     
                   try {
@@ -284,7 +298,14 @@ export async function useGetAllTransactions() {
               gmbl.value = transactions.value[i].gmbl ? transactions.value[i].gmbl : 0
               agix.value = transactions.value[i].agix ? transactions.value[i].agix : 0
               if (!contributor_idx.value.includes(contributor_id.value)) {
-                contributor_id.value = "no__id"
+                console.log(contributor_id.value)
+                if (oldWalletIds.value.includes(contributor_id.value)) {
+                  const oldwallet = await changeToOldWallet(contributor_id.value)
+                  console.log("changed", oldwallet)
+                  contributor_id.value = oldwallet
+                } else {
+                  contributor_id.value = "no__id"
+                }
               }
     
               try {
