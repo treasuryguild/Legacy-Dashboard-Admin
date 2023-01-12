@@ -177,21 +177,25 @@ export async function useGetAllTransactions() {
 
       function getTaskType(name, label, description) {
         var tasktypes = {
-          "Operations":["Operations","PM Meeting","Video Meeting","Marketing Call","Weekly call - Treasury Guild Team","Weekly Call - Swarm & Treasury Guild","Setting up","set up","Schedule","setup","Organiz","gdrive","miro","Community Suggestion","Management","Transactions","Install"],
+          "Operations":["Operations","PM Meeting","Video Meeting","Marketing Call","Weekly call - Treasury Guild Team","Weekly Call - Swarm & Treasury Guild","Setting up","set up","Schedule","setup","Organiz","gdrive","miro","Community Suggestion","Management","Transactions","Install","treasury","administration-of-budget","administration of budget","general admin", "remuneration", "salary", "payments", "leftover","test wallet","Other","budget administration","operational","research","preparation","move to exchange"],
           "Swarm Session":["Swarm Session","Join Saturday Swarm Session"],
           "Insight fest":["Insight fest"],
-          "Content Creation":["Content Creation","article","Poetry","create","creating","Promotion","videocreation","Translat","Clip & Edit"],
+          "Content Creation":["Content Creation","article","Poetry","create","creating","Promotion","videocreation","Translat","Clip & Edit","translat","videos","content shared","Town Hall Slides"],
           "ATH Participation":["ATH Participation","join us at After Town Hall"],
-          "Onboarding":["Onboarding","Onboard"],
+          "Onboarding":["Onboarding","Onboard","Mentorship","workshop"],
           "Timestamping":["Timestamping","timestamp"],
           "Documentation":["Documentation","How to","Report","mapping","Walkthrough"],
-          "Community Communication":["Community Communication","weekly call","Hosts","coordinat","Ambassador Town Hall","weekly meeting","community council","meeting","session","Facilitate","Announce"],
+          "Community Communication":["Community Communication","weekly call","Hosts","coordinat","Ambassador Town Hall","weekly meeting","community council","meeting","session","Facilitate","Announce","attendees"],
           "Governance":["Governance","voting"],
           "Tool Development":["Tool Development","MVP","Discord Server","Integrate","Add csv features","metadata"],
           "Ideation":["Ideation","Suggest"],
-          "Fixed costs":["Fixed costs","Comm Org Tools","Zoom","GitBook"]
+          "Incoming":["Incoming","IOG"],
+          "Staking":["Staking","Stake"],
+          "Donation":["Donation"],
+          "Incentive Budget":["new lead","verified cross-chain lead","verified lead", "generated lead", "confirmed collaboration", "lead collaboration", "support participation","Funded-proposer","Toolmakers-and-maintainers","Stake-Pool-Operators","General-ADA-Holder","Community-Advisors","Funded proposer","Toolmakers and maintainers","Stake Pool Operators","General ADA Holder","Community Advisors","Swarm bounties - CC Logo","funds to pay for CC Bounties","incentives"],
+          "Fixed costs":["Fixed costs","Comm Org Tools","Zoom","GitBook", "comm-org-tools", "expenses", "costs"]
         }
-        var finalResult = "";
+        /*var finalResult = "";
         for (let i in tasktypes) {
           if (tasktypes[i].some(s => name.includes(s))) {
             finalResult = i
@@ -202,7 +206,24 @@ export async function useGetAllTransactions() {
           if (tasktypes[i].some(s => description.includes(s))) {
             finalResult = i
           }
+        }*/
+
+        let finalResult = "";
+        for (let i in tasktypes) {
+          tasktypes[i].forEach(partialWord => {
+            let regex = new RegExp(partialWord.toLowerCase());
+            if (regex.test(description.toLowerCase())) {
+              finalResult = i;
+            }
+            if (regex.test(label.toLowerCase())) {
+             finalResult = i;
+            }
+            if (regex.test(name.toLowerCase())) {
+              finalResult = i;
+            }
+          });
         }
+
         return finalResult;
       }
 
@@ -218,7 +239,7 @@ export async function useGetAllTransactions() {
             
               if (transactions.value[i].exchangeRate) {
                 md_version.value = '0.02'
-                exchange_rate.value = parseFloat(transactions.value[i].exchangeRate)
+                exchange_rate.value = parseFloat(transactions.value[i].exchangeRate)?parseFloat(transactions.value[i].exchangeRate):0
                 total_ada.value = transactions.value[i].ada
                 total_gmbl.value = transactions.value[i].gmbl
                 total_agix.value = transactions.value[i].agix
