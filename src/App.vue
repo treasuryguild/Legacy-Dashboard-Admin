@@ -28,8 +28,9 @@
         <h2 v-else>{{ store.group }}</h2>
     </div>
   </div>
+  <!--
     <RouterLink style="margin: 0 5px" to="/">Home</RouterLink>
-    <RouterLink style="margin: 0 5px" to="/dashboard">Dashboard</RouterLink>
+    <RouterLink style="margin: 0 5px" to="/dashboard">Dashboard</RouterLink> -->
     <RouterView></RouterView>
   
   <!-- <Suspense>
