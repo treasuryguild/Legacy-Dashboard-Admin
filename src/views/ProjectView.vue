@@ -129,7 +129,7 @@ async function getProfile() {
     }
     if (user_id.value == "34d0bcdd-3872-499f-934d-a72d80582d1f") {
       andre.value = true
-    } else if (user_id.value == "8acfcf02-533f-4ea2-8baa-2b91b8be82d9") {
+    } else if (user_id.value == "15c4ce56-0bbe-435e-8e56-2cdfc877804e") {
       miro.value = true
     }
   }
