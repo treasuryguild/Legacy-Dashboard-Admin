@@ -27,14 +27,6 @@
         <h2 v-if="store.project">{{ store.project }}</h2>
         <h2 v-else>{{ store.group }}</h2>
     </div>
-    <div>
-      <a href="https://treasuryguild.io" target="_blank">
-        <img src="./assets/TG.png" class="logo" alt="Treasury Guild logo" />
-      </a>
-      <a href="https://catalystswarm.com/" target="_blank">
-        <img src="./assets/swarm.png" class="logo vue" alt="Catalyst Swarm logo" />
-      </a>
-    </div>
   </div>
     <RouterLink style="margin: 0 5px" to="/">Home</RouterLink>
     <RouterLink style="margin: 0 5px" to="/dashboard">Dashboard</RouterLink>
@@ -47,17 +39,6 @@
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
 .navbox {
   display: flex;
   justify-content: space-around;

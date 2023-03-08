@@ -4,11 +4,13 @@ import Dashboard from '../views/Dashboard.vue'
 import Wallet from '../views/Wallet.vue'
 import ProjectView from '../views/ProjectView.vue'
 import GroupView from '../views/GroupView.vue'
+import Profile from "../views/Profile.vue";
 
 const routes = [
     { path: '/', component: Home },
     { path: '/dashboard', component: Dashboard },
     { path: '/wallet', component: Wallet },
+    { path: "/profile", component: Profile },
     { path: '/search/:group', component: GroupView },
     { path: '/search/:group/:project', component: ProjectView }
 ]

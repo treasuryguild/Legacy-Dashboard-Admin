@@ -48,6 +48,8 @@ document.addEventListener('mouseover', function() {
 
   const loadGroup = ref(false)
   const loading = ref(true)
+  const full_name = ref('')
+  const avatar_url = ref('')
 
   const group_project_name = ref([])
   const group_updated_at = ref([])
@@ -59,8 +61,36 @@ document.addEventListener('mouseover', function() {
   
   const projectGroupId = ref()
 
+  async function getProfile() {
+    try {
+      loading.value = true
+      const { user } = session.value
+        full_name.value = user.user_metadata.full_name
+        avatar_url.value = user.user_metadata.avatar_url
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      loading.value = false
+    }
+  }
+
+
+const session = ref()
+
   onMounted(() => {
-    getGroups()
+    supabase.auth.getSession().then(({ data }) => {
+      session.value = data.session
+      if (session.value) {
+        getProfile()
+        getGroups()
+        //downloadImage()
+        console.log(data.session.user.user_metadata.full_name)
+      }
+    })
+
+    supabase.auth.onAuthStateChange((_, _session) => {
+      session.value = _session
+    })
   })
 
   async function getGroups() {
@@ -162,6 +192,26 @@ function onChange3() {
 			</menuitem>
 		</menu>
 	</nav>
+   <div class="navcont">
+    <p v-if="session"> {{ full_name }}</p>
+    <p v-else >Please sign in</p>
+    <RouterLink to="/profile">
+      <img
+          v-if="session"
+          :src="session.user.user_metadata.avatar_url"
+          alt="Avatar"
+          class="Avatar"
+          :style="{ height: 2 + 'em', width: 2 + 'em' }"
+        />
+        <img
+          v-else
+          src='https://live.staticflickr.com/5204/5281085864_614284bbd0.jpg'
+          alt="Avatar"
+          class="Avatar"
+          :style="{ height: 2 + 'em', width: 2 + 'em' }"
+        />
+    </RouterLink>
+    </div>
 </template>
 
 <style scoped>
@@ -277,5 +327,22 @@ menuitem > menu > menuitem.hover > menu > menuitem{
    transform:translateX(0) translateY(0%);
    opacity: 1;
 }
-
+.navcont {
+  display: flex;
+  justify-content: flex-end;
+}
+p {
+  margin: 1em;
+}
+.Avatar {
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  margin: 0.7em;
+}
+.Avatar:hover {
+  filter: brightness(1.2);
+  transform: scale(1.2);
+  border: 2px solid #65b5f6;
+}
 </style>
