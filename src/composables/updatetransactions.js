@@ -26,6 +26,7 @@ export async function useGetAllTransactions() {
     const transaction_date = ref('')
     const project_id = ref('')
     const transaction_json_url = ref('')
+    const transaction_json = ref('')
     const md_version = ref('')
     const recipients = ref('')
     const total_ada = ref('')
@@ -254,6 +255,7 @@ export async function useGetAllTransactions() {
             if (transactions.value[i].txid && (!transaction_idx.value.includes(transactionIds.value[i]))) { //only updates txs with new date ids
             transactionId.value = transactions.value[i].txid
             transaction_json_url.value = transactionsUrls.value[i]
+            transaction_json.value = transactions.value[i]
             transaction_date.value = transactionDates.value[i] 
             
               if (transactions.value[i].exchangeRate) {
@@ -314,6 +316,7 @@ export async function useGetAllTransactions() {
             project_id: project_id.value,
             md_version: md_version.value,
             tx_json_url: transaction_json_url.value,
+            tx_json: transaction_json.value,
             transaction_date: transaction_date.value,
             exchange_rate: exchange_rate.value,
             updated_at: new Date(),
