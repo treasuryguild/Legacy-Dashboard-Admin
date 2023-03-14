@@ -143,6 +143,9 @@ async function getProfile() {
     <div>
         <button class="bigbutton" @click="doEverything()">Update Transactions</button>
     </div>
+    <div>
+          <button @click="txs()">Dandelion is down Update tx Button</button>
+    </div>
   </div>
   <div v-if="andre" class="buttonbox">
     <div>
