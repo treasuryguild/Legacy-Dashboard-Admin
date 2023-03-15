@@ -34,6 +34,7 @@ export async function useGetAllTransactions() {
     const total_agix = ref('')
     const total_copi = ref('')
     const total_ntx = ref('')
+    const total_djed = ref('')
   
     const contributions = ref([])
     const task_creator = ref('')
@@ -50,6 +51,7 @@ export async function useGetAllTransactions() {
     const agix = ref('')
     const copi = ref('')
     const ntx = ref('')
+    const djed = ref('')
     const created_at = ref('')
   
     const walletx = ref([])
@@ -272,6 +274,7 @@ export async function useGetAllTransactions() {
                 total_agix.value = transactions.value[i].agix
                 total_copi.value = transactions.value[i].copi
                 total_ntx.value = transactions.value[i].ntx
+                total_djed.value = transactions.value[i].djed
               } else if (transactions.value[i].mdVersion) {
                 taskName = transactions.value[i].contributions[0].name?transactions.value[i].contributions[0].name.join(' '):''
                 if (Array.isArray(transactions.value[i].contributions[0].label)) {
@@ -292,6 +295,7 @@ export async function useGetAllTransactions() {
                 total_agix.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("AGIX"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("AGIX"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 total_copi.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("COPI"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("COPI"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 total_ntx.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("NTX"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("NTX"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
+                total_djed.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("DJED"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("DJED"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
               } else { 
                 taskName = ''
                 taskLabel = transactions.value[i].budget
@@ -306,6 +310,7 @@ export async function useGetAllTransactions() {
                 total_agix.value = transactions.value[i].agix
                 total_copi.value = transactions.value[i].copi
                 total_ntx.value = transactions.value[i].ntx
+                total_djed.value = transactions.value[i].djed
               }
     
             try {
@@ -326,7 +331,8 @@ export async function useGetAllTransactions() {
             total_gmbl: total_gmbl.value,
             total_agix: total_agix.value,
             total_copi: total_copi.value,
-            total_ntx: total_ntx.value
+            total_ntx: total_ntx.value,
+            total_djed: total_djed.value
           }
     
           let { data, error } = await supabase
@@ -400,6 +406,7 @@ export async function useGetAllTransactions() {
                   agix.value = transactions.value[i].contributions[k].contributors[m].AGIX?transactions.value[i].contributions[k].contributors[m].AGIX:0
                   copi.value = transactions.value[i].contributions[k].contributors[m].COPI?transactions.value[i].contributions[k].contributors[m].COPI:0
                   ntx.value = transactions.value[i].contributions[k].contributors[m].NTX?transactions.value[i].contributions[k].contributors[m].NTX:0
+                  djed.value = transactions.value[i].contributions[k].contributors[m].DJED?transactions.value[i].contributions[k].contributors[m].DJED:0
                   if (!contributor_idx.value.includes(contributor_id.value)) {
                     //console.log(contributor_id.value)
                     if (oldWalletIds.value.includes(contributor_id.value)) {
@@ -424,6 +431,7 @@ export async function useGetAllTransactions() {
                     agix: agix.value,
                     copi: copi.value,
                     ntx: ntx.value,
+                    djed: djed.value,
                   }
             
                   let { error } = await supabase.from('distributions').upsert(updates)
@@ -453,6 +461,7 @@ export async function useGetAllTransactions() {
               agix.value = transactions.value[i].agix ? transactions.value[i].agix : 0
               copi.value = transactions.value[i].copi ? transactions.value[i].copi : 0
               ntx.value = transactions.value[i].ntx ? transactions.value[i].ntx : 0
+              djed.value = transactions.value[i].djed ? transactions.value[i].djed : 0
               if (!contributor_idx.value.includes(contributor_id.value)) {
                 //console.log(contributor_id.value)
                 if (oldWalletIds.value.includes(contributor_id.value)) {
@@ -506,6 +515,7 @@ export async function useGetAllTransactions() {
                     agix: agix.value,
                     copi: copi.value,
                     ntx: ntx.value,
+                    djed: djed.value,
                   }
             
                   let { error } = await supabase.from('distributions').upsert(updates2)
