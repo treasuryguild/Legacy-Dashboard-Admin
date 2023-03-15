@@ -9,7 +9,7 @@ export async function useDeleteLatestTxs(project_id) {
   const loading = ref(true)
   let dateLength = ref()
   //Math.floor(date.getTime() / 1000)
-  dateLength.value = new Date(Date.now() - 18000000).toISOString().slice(0, 10)//new Date((date.getTime()) - 18000000)
+  dateLength.value = new Date(Date.now() - 180000000).toISOString().slice(0, 10)//new Date((date.getTime()) - 18000000)
   
   const store = useStore()
 
