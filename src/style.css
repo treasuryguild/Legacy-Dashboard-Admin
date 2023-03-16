@@ -74,16 +74,3 @@ button:focus-visible {
   margin: 0 auto;
   padding: 2rem;
 }
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #b5cfe5;
-    background-color: #433838;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #423e3e;
-  }
-}

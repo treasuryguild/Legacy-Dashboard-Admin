@@ -87,6 +87,7 @@ console.log(closestNum); // 30
         Home 
         {{ store.name }}{{ store.number }}{{ store.group }}{{ store.project }} 
     </div>
+    <RouterLink style="margin: 0 5px" to="/dashboard">Dashboard</RouterLink>
     <div>
         <button @click="store.changeName('Roberto')">Change name to Roberto</button>
     </div>

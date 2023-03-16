@@ -68,9 +68,20 @@
         }
       }
 
-  async function txs() {
+async function txs() {
+  loading.value = true;
   const { status } = await useGetAllTransactions()
   console.log(status.value)
+  loading.value = false;
+  location.reload(true);
+}
+
+async function txs2() {
+  loading.value = true;
+  const { status } = await useGetAllTransactions()
+  console.log(status.value)
+  loading.value = false;
+  location.reload(true);
 }
 
 async function fees() {
@@ -139,18 +150,18 @@ async function getProfile() {
   <main>
     <h2>Project {{ store.project }}</h2>
   <div class="main">
-  <div v-if="miro" class="buttonbox">
+  <div v-if="miro && !loading" class="buttonbox">
     <div>
         <button class="bigbutton" @click="doEverything()">Update Transactions</button>
     </div>
     <div>
-          <button @click="txs()">Dandelion is down Update tx Button</button>
+          <button @click="txs2()">Dandelion is down Update tx Button</button>
     </div>
   </div>
-  <div v-if="andre" class="buttonbox">
+  <div v-if="andre && !loading" class="buttonbox">
     <div>
       <div>
-          <button @click="txs()">Update Transactions</button>
+          <button @click="txs()">Update Transactions (Dandelion is down)</button>
       </div>
       <div>
           <button @click="fees()">Update Fees</button>
