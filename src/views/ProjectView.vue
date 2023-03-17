@@ -73,7 +73,6 @@ async function txs() {
   const { status } = await useGetAllTransactions()
   console.log(status.value)
   loading.value = false;
-  location.reload(true);
 }
 
 async function txs2() {

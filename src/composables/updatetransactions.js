@@ -35,6 +35,8 @@ export async function useGetAllTransactions() {
     const total_copi = ref('')
     const total_ntx = ref('')
     const total_djed = ref('')
+    const total_tokens = ref([])
+    const total_amounts = ref([])
   
     const contributions = ref([])
     const task_creator = ref('')
@@ -242,11 +244,56 @@ export async function useGetAllTransactions() {
         return finalResult;
       }
 
+      function extractValues(strArray) {
+        const floatRegex = /[+-]?\d+(\.\d+)?/g
+        const currencyRegex = /[A-Z]+$/g;
+      
+        const values = [];
+        const currencies = [];
+      
+        for (const str of strArray) {
+          const matches = str.match(floatRegex);
+      
+          if (matches && matches.length >= 2 && str.includes("USD")) {
+            values.push(parseFloat(matches[1]));
+            currencies.push(str.match(currencyRegex)[0]);
+          }
+        }
+      
+        return {values, currencies};
+      }
+    
+
+      function getContributorData(obj, contributorKey) {
+        const contributorData = obj.contributions.filter(contribution => contribution.contributors[contributorKey]);
+    
+        if (contributorData.length === 0) {
+            return [[], []]; // Contributor key not found
+        }
+    
+        const contributorObj = contributorData[0].contributors[contributorKey];
+        let keysArray = Object.keys(contributorObj);
+        let keysArray2 = Object.keys(contributorObj);
+    
+        // Replace "gimbal" with "GMBL" in the keysArray
+        if (keysArray.includes("gimbal")) {
+            const index = keysArray.indexOf("gimbal");
+            keysArray[index] = "GMBL";
+        }
+    
+        const valuesArray = keysArray2.map(key => contributorObj[key]);
+    
+        return [keysArray, valuesArray];
+    }
+    
+
       async function updateTransactions() {
+        let result = {};
          
         const { transactions, transactionsUrls, transactionDates, transactionIds } =  await useGetTxs(orgEl, repoEl, projectJ.value, fundJ.value, poolJ.value)
           console.log(Date.now(), transactions.value[0])
           for (let i in transactions.value) {
+            result = {};
             let taskName = ''
             let taskLabel = ''
             let taskLabelArray = []
@@ -275,6 +322,12 @@ export async function useGetAllTransactions() {
                 total_copi.value = transactions.value[i].copi
                 total_ntx.value = transactions.value[i].ntx
                 total_djed.value = transactions.value[i].djed
+                result.currencies = [];
+                result.values = [];
+                result.currencies = ['ada', 'gmbl', 'agix', 'copi', 'ntx', 'djed'];
+                result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed];
+                total_tokens.value = result.currencies;
+                total_amounts.value = result.values;
               } else if (transactions.value[i].mdVersion) {
                 taskName = transactions.value[i].contributions[0].name?transactions.value[i].contributions[0].name.join(' '):''
                 if (Array.isArray(transactions.value[i].contributions[0].label)) {
@@ -296,6 +349,10 @@ export async function useGetAllTransactions() {
                 total_copi.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("COPI"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("COPI"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 total_ntx.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("NTX"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("NTX"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 total_djed.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("DJED"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("DJED"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
+                result = extractValues(transactions.value[i].msg);
+                total_tokens.value = result.currencies;
+                total_amounts.value = result.values;
+                
               } else { 
                 taskName = ''
                 taskLabel = transactions.value[i].budget
@@ -311,6 +368,12 @@ export async function useGetAllTransactions() {
                 total_copi.value = transactions.value[i].copi
                 total_ntx.value = transactions.value[i].ntx
                 total_djed.value = transactions.value[i].djed
+                result.currencies = [];
+                result.values = [];
+                result.currencies = ['ada', 'gmbl', 'agix', 'copi', 'ntx', 'djed'];
+                result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed];
+                total_tokens.value = result.currencies;
+                total_amounts.value = result.values;
               }
     
             try {
@@ -332,9 +395,12 @@ export async function useGetAllTransactions() {
             total_agix: total_agix.value,
             total_copi: total_copi.value,
             total_ntx: total_ntx.value,
-            total_djed: total_djed.value
+            total_djed: total_djed.value,
+            total_tokens: total_tokens.value,
+            total_amounts: total_amounts.value
           }
-    
+          console.log("New amounts", result.values); // [33126.15, 6000]
+          console.log("New tokens", result.currencies); // ["ADA", "GMBL"]
           let { data, error } = await supabase
             .from('transactions')
             .upsert(updates)
@@ -401,6 +467,8 @@ export async function useGetAllTransactions() {
     
                 for (let m in transactions.value[i].contributions[k].contributors) {
                   contributor_id.value = m
+                  const [ keysArray, valuesArray ] = getContributorData(transactions.value[i], m);
+                  console.log("Dist toks and amms", keysArray, valuesArray);
                   ada.value = transactions.value[i].contributions[k].contributors[m].ADA?transactions.value[i].contributions[k].contributors[m].ADA:(transactions.value[i].contributions[k].contributors[m].ada?transactions.value[i].contributions[k].contributors[m].ada:1.344798)
                   gmbl.value = transactions.value[i].contributions[k].contributors[m].GMBL?transactions.value[i].contributions[k].contributors[m].GMBL:(transactions.value[i].contributions[k].contributors[m].gimbal?transactions.value[i].contributions[k].contributors[m].gimbal:0)
                   agix.value = transactions.value[i].contributions[k].contributors[m].AGIX?transactions.value[i].contributions[k].contributors[m].AGIX:0
@@ -432,6 +500,8 @@ export async function useGetAllTransactions() {
                     copi: copi.value,
                     ntx: ntx.value,
                     djed: djed.value,
+                    tokens: keysArray,
+                    amounts: valuesArray
                   }
             
                   let { error } = await supabase.from('distributions').upsert(updates)
@@ -462,6 +532,15 @@ export async function useGetAllTransactions() {
               copi.value = transactions.value[i].copi ? transactions.value[i].copi : 0
               ntx.value = transactions.value[i].ntx ? transactions.value[i].ntx : 0
               djed.value = transactions.value[i].djed ? transactions.value[i].djed : 0
+              let keysArray = ['ada', 'gmbl', 'agix', 'copi', 'ntx', 'djed'];
+              let valuesArray = [
+                transactions.value[i].ada ? transactions.value[i].ada : 0,
+                transactions.value[i].gmbl ? transactions.value[i].gmbl : 0,
+                transactions.value[i].agix ? transactions.value[i].agix : 0,
+                transactions.value[i].copi ? transactions.value[i].copi : 0,
+                transactions.value[i].ntx ? transactions.value[i].ntx : 0,
+                transactions.value[i].djed ? transactions.value[i].djed : 0
+              ];
               if (!contributor_idx.value.includes(contributor_id.value)) {
                 //console.log(contributor_id.value)
                 if (oldWalletIds.value.includes(contributor_id.value)) {
@@ -516,6 +595,8 @@ export async function useGetAllTransactions() {
                     copi: copi.value,
                     ntx: ntx.value,
                     djed: djed.value,
+                    tokens: keysArray,
+                    amounts: valuesArray
                   }
             
                   let { error } = await supabase.from('distributions').upsert(updates2)
