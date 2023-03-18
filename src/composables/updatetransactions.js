@@ -324,8 +324,14 @@ export async function useGetAllTransactions() {
                 total_djed.value = transactions.value[i].djed
                 result.currencies = [];
                 result.values = [];
-                result.currencies = ['ada', 'gmbl', 'agix', 'copi', 'ntx', 'djed'];
+                result.currencies = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED'];
                 result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed];
+                // Filter out null values from the result.values array
+                result.values = result.values.filter(value => value !== undefined);
+                
+                // Remove corresponding currencies from result.currencies array
+                result.currencies = result.currencies.filter((currency, index) => result.values[index] !== undefined);
+                
                 total_tokens.value = result.currencies;
                 total_amounts.value = result.values;
               } else if (transactions.value[i].mdVersion) {
@@ -370,8 +376,14 @@ export async function useGetAllTransactions() {
                 total_djed.value = transactions.value[i].djed
                 result.currencies = [];
                 result.values = [];
-                result.currencies = ['ada', 'gmbl', 'agix', 'copi', 'ntx', 'djed'];
+                result.currencies = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED'];
                 result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed];
+                // Filter out null values from the result.values array
+                result.values = result.values.filter(value => value !== undefined);
+                
+                // Remove corresponding currencies from result.currencies array
+                result.currencies = result.currencies.filter((currency, index) => result.values[index] !== undefined);
+
                 total_tokens.value = result.currencies;
                 total_amounts.value = result.values;
               }
@@ -532,15 +544,21 @@ export async function useGetAllTransactions() {
               copi.value = transactions.value[i].copi ? transactions.value[i].copi : 0
               ntx.value = transactions.value[i].ntx ? transactions.value[i].ntx : 0
               djed.value = transactions.value[i].djed ? transactions.value[i].djed : 0
-              let keysArray = ['ada', 'gmbl', 'agix', 'copi', 'ntx', 'djed'];
+              let keysArray = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED'];
               let valuesArray = [
-                transactions.value[i].ada ? transactions.value[i].ada : 0,
-                transactions.value[i].gmbl ? transactions.value[i].gmbl : 0,
-                transactions.value[i].agix ? transactions.value[i].agix : 0,
-                transactions.value[i].copi ? transactions.value[i].copi : 0,
-                transactions.value[i].ntx ? transactions.value[i].ntx : 0,
-                transactions.value[i].djed ? transactions.value[i].djed : 0
+                transactions.value[i].ada,
+                transactions.value[i].gmbl,
+                transactions.value[i].agix,
+                transactions.value[i].copi,
+                transactions.value[i].ntx,
+                transactions.value[i].djed
               ];
+              // Filter out null values from the result.values array
+              valuesArray = valuesArray.filter(value => value !== undefined);
+                
+              // Remove corresponding currencies from result.currencies array
+              keysArray = keysArray.filter((currency, index) => valuesArray[index] !== undefined);
+
               if (!contributor_idx.value.includes(contributor_id.value)) {
                 //console.log(contributor_id.value)
                 if (oldWalletIds.value.includes(contributor_id.value)) {
