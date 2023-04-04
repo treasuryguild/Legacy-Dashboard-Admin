@@ -264,14 +264,13 @@ export async function useGetAllTransactions() {
       }
     
 
-      function getContributorData(obj, contributorKey) {
-        const contributorData = obj.contributions.filter(contribution => contribution.contributors[contributorKey]);
+      function getContributorData(contribution, contributorKey) {
+        const contributorObj = contribution.contributors[contributorKey];
     
-        if (contributorData.length === 0) {
+        if (!contributorObj) {
             return [[], []]; // Contributor key not found
         }
     
-        const contributorObj = contributorData[0].contributors[contributorKey];
         let keysArray = Object.keys(contributorObj);
         let keysArray2 = Object.keys(contributorObj);
     
@@ -283,7 +282,7 @@ export async function useGetAllTransactions() {
     
         const valuesArray = keysArray2.map(key => contributorObj[key]);
     
-        return [keysArray, valuesArray];
+        return [keysArray.map(str => str.toUpperCase()), valuesArray];
     }
     
 
@@ -479,7 +478,7 @@ export async function useGetAllTransactions() {
     
                 for (let m in transactions.value[i].contributions[k].contributors) {
                   contributor_id.value = m
-                  const [ keysArray, valuesArray ] = getContributorData(transactions.value[i], m);
+                  const [ keysArray, valuesArray ] = getContributorData(transactions.value[i].contributions[k], m);
                   console.log("Dist toks and amms", keysArray, valuesArray);
                   ada.value = transactions.value[i].contributions[k].contributors[m].ADA?transactions.value[i].contributions[k].contributors[m].ADA:(transactions.value[i].contributions[k].contributors[m].ada?transactions.value[i].contributions[k].contributors[m].ada:0)
                   gmbl.value = transactions.value[i].contributions[k].contributors[m].GMBL?transactions.value[i].contributions[k].contributors[m].GMBL:(transactions.value[i].contributions[k].contributors[m].gimbal?transactions.value[i].contributions[k].contributors[m].gimbal:0)
