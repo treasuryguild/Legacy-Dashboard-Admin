@@ -402,11 +402,6 @@ export async function useGetAllTransactions() {
             recipients: recipients.value,
             tx_type: tx_type.value,
             total_ada: total_ada.value,
-            total_gmbl: total_gmbl.value,
-            total_agix: total_agix.value,
-            total_copi: total_copi.value,
-            total_ntx: total_ntx.value,
-            total_djed: total_djed.value,
             total_tokens: total_tokens.value,
             total_amounts: total_amounts.value
           }
@@ -505,12 +500,6 @@ export async function useGetAllTransactions() {
                     project_id: project_id.value,
                     contribution_id: contribution_id.value,
                     contributor_id: contributor_id.value,
-                    ada: ada.value,
-                    gmbl: gmbl.value,
-                    agix: agix.value,
-                    copi: copi.value,
-                    ntx: ntx.value,
-                    djed: djed.value,
                     tokens: keysArray,
                     amounts: valuesArray
                   }
@@ -606,12 +595,6 @@ export async function useGetAllTransactions() {
                     project_id: project_id.value,
                     contribution_id: contribution_id.value,
                     contributor_id: contributor_id.value,
-                    ada: ada.value,
-                    gmbl: gmbl.value,
-                    agix: agix.value,
-                    copi: copi.value,
-                    ntx: ntx.value,
-                    djed: djed.value,
                     tokens: keysArray,
                     amounts: valuesArray
                   }
