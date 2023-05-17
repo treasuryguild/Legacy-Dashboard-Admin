@@ -35,6 +35,7 @@ export async function useGetAllTransactions() {
     const total_copi = ref('')
     const total_ntx = ref('')
     const total_djed = ref('')
+    const total_GovWG = ref('')
     const total_tokens = ref([])
     const total_amounts = ref([])
   
@@ -54,6 +55,7 @@ export async function useGetAllTransactions() {
     const copi = ref('')
     const ntx = ref('')
     const djed = ref('')
+    const GovWG = ref('')
     const created_at = ref('')
   
     const walletx = ref([])
@@ -321,10 +323,11 @@ export async function useGetAllTransactions() {
                 total_copi.value = transactions.value[i].copi
                 total_ntx.value = transactions.value[i].ntx
                 total_djed.value = transactions.value[i].djed
+                total_GovWG.value = transactions.value[i].GovWG
                 result.currencies = [];
                 result.values = [];
-                result.currencies = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED'];
-                result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed];
+                result.currencies = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED', 'GovWG'];
+                result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed, transactions.value[i].GovWG];
                 // Filter out null values from the result.values array
                 result.values = result.values.filter(value => value !== undefined);
                 
@@ -354,6 +357,7 @@ export async function useGetAllTransactions() {
                 total_copi.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("COPI"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("COPI"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 total_ntx.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("NTX"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("NTX"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 total_djed.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("DJED"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("DJED"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
+                total_GovWG.value = transactions.value[i].msg.some(str => str.includes("USD") && str.includes("GovWG"))?(((transactions.value[i].msg[transactions.value[i].msg.findIndex(str => str.includes("USD") && str.includes("GovWG"))]).match(/[+-]?\d+(\.\d+)?/g).map(parseFloat))[1]):0
                 result = extractValues(transactions.value[i].msg);
                 total_tokens.value = result.currencies;
                 total_amounts.value = result.values;
@@ -373,10 +377,11 @@ export async function useGetAllTransactions() {
                 total_copi.value = transactions.value[i].copi
                 total_ntx.value = transactions.value[i].ntx
                 total_djed.value = transactions.value[i].djed
+                total_GovWG.value = transactions.value[i].GovWG
                 result.currencies = [];
                 result.values = [];
-                result.currencies = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED'];
-                result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed];
+                result.currencies = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED', 'GovWG'];
+                result.values = [transactions.value[i].ada, transactions.value[i].gmbl, transactions.value[i].agix, transactions.value[i].copi, transactions.value[i].ntx, transactions.value[i].djed, transactions.value[i].GovWG];
                 // Filter out null values from the result.values array
                 result.values = result.values.filter(value => value !== undefined);
                 
@@ -481,6 +486,7 @@ export async function useGetAllTransactions() {
                   copi.value = transactions.value[i].contributions[k].contributors[m].COPI?transactions.value[i].contributions[k].contributors[m].COPI:0
                   ntx.value = transactions.value[i].contributions[k].contributors[m].NTX?transactions.value[i].contributions[k].contributors[m].NTX:0
                   djed.value = transactions.value[i].contributions[k].contributors[m].DJED?transactions.value[i].contributions[k].contributors[m].DJED:0
+                  GovWG.value = transactions.value[i].contributions[k].contributors[m].GovWG?transactions.value[i].contributions[k].contributors[m].GovWG:0
                   if (!contributor_idx.value.includes(contributor_id.value)) {
                     //console.log(contributor_id.value)
                     if (oldWalletIds.value.includes(contributor_id.value)) {
@@ -532,14 +538,16 @@ export async function useGetAllTransactions() {
               copi.value = transactions.value[i].copi ? transactions.value[i].copi : 0
               ntx.value = transactions.value[i].ntx ? transactions.value[i].ntx : 0
               djed.value = transactions.value[i].djed ? transactions.value[i].djed : 0
-              let keysArray = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED'];
+              GovWG.value = transactions.value[i].GovWG ? transactions.value[i].GovWG : 0
+              let keysArray = ['ADA', 'GMBL', 'AGIX', 'COPI', 'NTX', 'DJED', 'GovWG'];
               let valuesArray = [
                 transactions.value[i].ada,
                 transactions.value[i].gmbl,
                 transactions.value[i].agix,
                 transactions.value[i].copi,
                 transactions.value[i].ntx,
-                transactions.value[i].djed
+                transactions.value[i].djed,
+                transactions.value[i].GovWG
               ];
               // Filter out null values from the result.values array
               valuesArray = valuesArray.filter(value => value !== undefined);
