@@ -248,22 +248,38 @@ export async function useGetAllTransactions() {
 
       function extractValues(strArray) {
         const floatRegex = /[+-]?\d+(\.\d+)?/g
-        const currencyRegex = /[A-Z]+$/g;
+        const currencyRegex = /(?<=\s)\b[A-Z]+\b(?=\s*$)/g;
       
         const values = [];
         const currencies = [];
       
         for (const str of strArray) {
           const matches = str.match(floatRegex);
-      
+    
           if (matches && matches.length >= 2 && str.includes("USD")) {
             values.push(parseFloat(matches[1]));
-            currencies.push(str.match(currencyRegex)[0]);
+    
+            // Temporarily make the string all uppercase
+            const upperStr = str.toUpperCase();
+    
+            // Try to match the currency in the uppercase string
+            let currencyMatches = upperStr.match(currencyRegex);
+    
+            // If the match is null, skip this iteration
+            if (!currencyMatches) {
+              continue;
+            } 
+    
+            // Add currency to the currencies array in uppercase
+            currencies.push(currencyMatches[0]);
           }
         }
       
         return {values, currencies};
-      }
+    }
+    
+    
+    
     
 
       function getContributorData(contribution, contributorKey) {
